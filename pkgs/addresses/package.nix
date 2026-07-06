@@ -6,18 +6,21 @@
   gnustep-make,
   gnustep-libobjc,
   libblocksruntime,
+  wrapGNUstepAppsHook,
+  gnustep-back,
   gnustep-base,
-  openssl,
+  gnustep-gui,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "pantomime";
-  version = "1.4.0";
+  pname = "addresses";
+  version = "0.5.0";
 
   src = fetchurl {
-    url = "http://download.savannah.nongnu.org/releases/gnustep-nonfsf/Pantomime-${finalAttrs.version}.tar.gz";
-    hash = "sha256-kKWMcbdaZV51z+DbNICyIWOcPr5eCvJ5/W6vspQUOPg=";
+    url = "https://download.savannah.gnu.org/releases/gap/Addresses-${finalAttrs.version}.tar.gz";
+    hash = "sha256-+wdOgMhfSKpX4cAbzc0aV1S63oTWHM99t1Se8gsbpOE=";
   };
+
   
   nativeBuildInputs = [
     llvmPackages.clang
@@ -25,11 +28,14 @@ stdenv.mkDerivation (finalAttrs: {
     gnustep-make
     gnustep-libobjc
     libblocksruntime
+
+    wrapGNUstepAppsHook
   ];
 
   buildInputs = [
+    gnustep-back
     gnustep-base
-    openssl
+    gnustep-gui
   ];
 
   buildPhase = ''
@@ -48,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     make install \
+      GNUSTEP_LOCAL_APPS="$out/lib/GNUstep/Applications" \
+      GNUSTEP_LOCAL_TOOLS="$out/bin" \
       GNUSTEP_LOCAL_LIBRARY="$out/lib/GNUstep" \
       GNUSTEP_LOCAL_HEADERS="$out/include" \
       GNUSTEP_LOCAL_LIBRARIES="$out/lib" \
@@ -59,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Set of Objective-C classes that model a mail system";
-    homepage = "https://www.nongnu.org/gnustep-nonfsf/gnumail";
+    description = "Addresses is a versatile Address Book application and framework";
+    homepage = "https://www.nongnu.org/gap/addresses/index.html";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
