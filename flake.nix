@@ -1,8 +1,6 @@
 {
   description = "GNUstep related projects";
 
-  inputs.nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-
   outputs = {self, nixpkgs, ...}@inputs: let
     perSystem = nixpkgs.lib.genAttrs [
       "x86_64-linux"
@@ -10,9 +8,9 @@
       "aarch64-linux"
     ];
 
-    callPackage = system: let
-      pkgs = nixpkgs.legacyPackages.${system};
-    in pkgs.lib.callPackageWith (pkgs // customPkgs system);
+    callPackage = system: (pkgs system).lib.callPackageWith (pkgs system // customPkgs system);
+
+    pkgs = system: nixpkgs.legacyPackages.${system};
 
     customPkgs = system: nixpkgs.lib.genAttrs
       (builtins.attrNames (builtins.readDir ./pkgs))
@@ -22,4 +20,6 @@
 
     overlays = perSystem (system: final: prev: customPkgs system);
   };
+
+  inputs.nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
 }
