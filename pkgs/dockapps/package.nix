@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  fetchgit,
 }:
 
 lib.makeScope pkgs.newScope (self: let
@@ -16,8 +17,8 @@ in {
     pname = "dockapps-sources";
     version = "2025-1-1";
 
-    src = pkgs.fetchFromRepoOrCz {
-      repo = "dockapps";
+    src = fetchgit {
+      url = "https://repo.or.cz/dockapps.git";
       rev = "62c0416286dd7c3ae550c68b9635dd305c83f51b";
       hash = "sha256-pVyyvYZj9ANUMqXJe2Ky4otgV7wsfLcnWNCgaJXL578=";
     };
